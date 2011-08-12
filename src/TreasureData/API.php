@@ -1,6 +1,12 @@
 <?php
 /**
+ *  API.php
  *
+ *  The library entry point.
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
  */
 
 namespace TreasureData;
@@ -13,6 +19,14 @@ if (!extension_loaded('curl')) {
 use TreasureData\Exception;
 use TreasureData\API\Base;
 
+
+/**
+ *  TreasureData\API
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
+ */
 class API
 {
     const CONFFILE = '~/.td/td.conf';

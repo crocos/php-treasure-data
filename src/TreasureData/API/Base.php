@@ -8,6 +8,13 @@ namespace TreasureData\API;
 use TreasureData\API;
 use TreasureData\Exception;
 
+/**
+ *  TreasureData\API\Base
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
+ */
 abstract class Base
 {
     protected $db_name = null;
@@ -16,6 +23,11 @@ abstract class Base
         'job',
     );
 
+    /**
+     *  __construct
+     *
+     *  @param      string  $db_name
+     */
     public function __construct($db_name)
     {
         $this->db_name = $db_name;

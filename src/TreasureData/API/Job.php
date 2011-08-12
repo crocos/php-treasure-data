@@ -1,6 +1,10 @@
 <?php
 /**
+ *  Job.php
  *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
  */
 
 namespace TreasureData\API;
@@ -8,6 +12,13 @@ namespace TreasureData\API;
 use TreasureData\Exception;
 use TreasureData\API\Base;
 
+/**
+ *  TreasureData\API\Job
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
+ */
 class Job extends Base
 {
     const PATH = 'job';
