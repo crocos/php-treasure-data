@@ -38,6 +38,8 @@ class API
 
     protected static $instances = array();
 
+    public static $is_debug = false;
+
     public function __construct($db_name, $conf_file = null, $api_key = null)
     {
 
@@ -74,6 +76,11 @@ class API
         }
     }
 
+    public function setDebug($is_debug = false)
+    {
+        static::$is_debug = (bool)$is_debug;
+    }
+
     public function getAPIKey()
     {
         return self::$api_key;
@@ -103,6 +110,15 @@ class API
         $filename = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $classname) . '.php';
         if (is_readable($filename)) {
             require_once $filename;
+        }
+    }
+
+    public static function log($msg, $file = 'php://stderr')
+    {
+        if (static::$is_debug) {
+            $fp = fopen($file, 'a+');
+            fprintf($fp, '[DEBUG] '. $msg . PHP_EOL, FILE_APPEND);
+            fclose($fp);
         }
     }
 }
