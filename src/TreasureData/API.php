@@ -34,7 +34,7 @@ class API
         }
         else {
             if (null === $conf_file) {
-                $conf_file = str_replace('~/', getenv('HOME'), self::CONFFILE);
+                $conf_file = str_replace('~/', getenv('HOME') . '/', self::CONFFILE);
             }
             if (!(file_exists($conf_file) && is_readable($conf_file))) {
                 throw new Exception("Config file not found or not readable: $conf_file");
@@ -49,7 +49,7 @@ class API
                 }
                 list($key, $value) = $line_array;
                 if (trim($key) == 'apikey') {
-                    $api_key = $value;
+                    $api_key = trim($value);
                 }
             }
             if (null === $api_key) {
