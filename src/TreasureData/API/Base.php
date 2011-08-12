@@ -43,6 +43,8 @@ abstract class Base
             $url .= '?' . http_build_query($params);
         }
 
+        API::log("API request to $url");
+
         $ch = curl_init($url);
         if ($is_post) {
             curl_setopt($ch, CURLOPT_POST, 1);
