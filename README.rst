@@ -15,6 +15,10 @@ Example
 -------------------------------
 
 
+see:
+
+* `Example for issue, show, result. <example/all.php>`_
+
 License
 -------------------------------
 
