@@ -40,7 +40,7 @@ class API
 
     public static $is_debug = false;
 
-    public function __construct($db_name, $conf_file = null, $api_key = null)
+    public function __construct($db_name, $api_key = null, $conf_file = null)
     {
 
         $this->db_name = $db_name;
