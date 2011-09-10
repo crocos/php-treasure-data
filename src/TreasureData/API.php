@@ -75,12 +75,12 @@ class API
         }
     }
 
-    public function setDebug($is_debug = false)
+    public static function setDebug($is_debug = false)
     {
         static::$is_debug = (bool)$is_debug;
     }
 
-    public function getAPIKey()
+    public static function getAPIKey()
     {
         return self::$api_key;
     }
