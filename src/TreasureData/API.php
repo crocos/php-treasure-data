@@ -1,11 +1,16 @@
 <?php
 /**
+ *  API.php
  *
+ *  The library entry point.
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
  */
 
 namespace TreasureData;
 
-spl_autoload_register(__NAMESPACE__ . '\\API::loadClass');
 if (!extension_loaded('curl')) {
     throw new \Exception('TreasureData requires curl extension.');
 }
@@ -13,6 +18,14 @@ if (!extension_loaded('curl')) {
 use TreasureData\Exception;
 use TreasureData\API\Base;
 
+
+/**
+ *  TreasureData\API
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
+ */
 class API
 {
     const CONFFILE = '~/.td/td.conf';
@@ -24,7 +37,9 @@ class API
 
     protected static $instances = array();
 
-    public function __construct($db_name, $conf_file = null, $api_key = null)
+    public static $is_debug = false;
+
+    public function __construct($db_name, $api_key = null, $conf_file = null)
     {
 
         $this->db_name = $db_name;
@@ -34,7 +49,7 @@ class API
         }
         else {
             if (null === $conf_file) {
-                $conf_file = str_replace('~/', getenv('HOME'), self::CONFFILE);
+                $conf_file = str_replace('~/', getenv('HOME') . '/', self::CONFFILE);
             }
             if (!(file_exists($conf_file) && is_readable($conf_file))) {
                 throw new Exception("Config file not found or not readable: $conf_file");
@@ -49,7 +64,7 @@ class API
                 }
                 list($key, $value) = $line_array;
                 if (trim($key) == 'apikey') {
-                    $api_key = $value;
+                    $api_key = trim($value);
                 }
             }
             if (null === $api_key) {
@@ -60,7 +75,12 @@ class API
         }
     }
 
-    public function getAPIKey()
+    public static function setDebug($is_debug = false)
+    {
+        static::$is_debug = (bool)$is_debug;
+    }
+
+    public static function getAPIKey()
     {
         return self::$api_key;
     }
@@ -89,6 +109,15 @@ class API
         $filename = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $classname) . '.php';
         if (is_readable($filename)) {
             require_once $filename;
+        }
+    }
+
+    public static function log($msg, $file = 'php://stderr')
+    {
+        if (static::$is_debug) {
+            $fp = fopen($file, 'a+');
+            fprintf($fp, '[DEBUG] '. str_replace('%', '%%', $msg) . PHP_EOL);
+            fclose($fp);
         }
     }
 }

@@ -1,6 +1,10 @@
 <?php
 /**
+ *  Job.php
  *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
  */
 
 namespace TreasureData\API;
@@ -8,6 +12,13 @@ namespace TreasureData\API;
 use TreasureData\Exception;
 use TreasureData\API\Base;
 
+/**
+ *  TreasureData\API\Job
+ *
+ *  @package    TreasureData
+ *  @author     Sotaro KARASAWA <sotarok@crocos.co.jp>
+ *  @license    Apache License 2.0
+ */
 class Job extends Base
 {
     const PATH = 'job';
@@ -19,7 +30,7 @@ class Job extends Base
         $result = $this->request($path, array('query' => $query), true);
         $json = json_decode($result);
         if (!$json->job_id) {
-            throw new Exception('Failed to job issued.');
+            throw new Exception("Failed to job issued: result='$result'");
         }
 
         return $json->job_id;
@@ -30,7 +41,13 @@ class Job extends Base
         $path = sprintf('show/%s', $id);
 
         $result = $this->request($path);
-        return json_decode($result);
+        $json = json_decode($result);
+        if (!$json->job_id) {
+            $msg = !empty($json->message) ? $json->message : $result;
+            throw new Exception("Failed to show: $msg");
+        }
+
+        return $json;
     }
 
     public function result($id, $format = 'tsv')
