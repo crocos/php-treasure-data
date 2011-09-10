@@ -11,7 +11,6 @@
 
 namespace TreasureData;
 
-spl_autoload_register(__NAMESPACE__ . '\\API::loadClass');
 if (!extension_loaded('curl')) {
     throw new \Exception('TreasureData requires curl extension.');
 }
