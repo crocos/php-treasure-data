@@ -117,7 +117,7 @@ class API
     {
         if (static::$is_debug) {
             $fp = fopen($file, 'a+');
-            fprintf($fp, '[DEBUG] '. $msg . PHP_EOL, FILE_APPEND);
+            fprintf($fp, '[DEBUG] '. str_replace('%', '%%', $msg) . PHP_EOL);
             fclose($fp);
         }
     }
