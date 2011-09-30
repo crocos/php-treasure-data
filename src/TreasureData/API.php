@@ -99,19 +99,6 @@ class API
         return static::$instances[$name];
     }
 
-    public static function loadClass($name)
-    {
-        if (!preg_match('/^TreasureData\\\\(.+)/', $name, $matches)) {
-            return ;
-        }
-
-        $classname = $matches[1];
-        $filename = __DIR__ . DIRECTORY_SEPARATOR . str_replace('\\', DIRECTORY_SEPARATOR, $classname) . '.php';
-        if (is_readable($filename)) {
-            require_once $filename;
-        }
-    }
-
     public static function log($msg, $file = 'php://stderr')
     {
         if (static::$is_debug) {
