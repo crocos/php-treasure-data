@@ -25,7 +25,7 @@ class Job extends Base
 
     public function issue($query)
     {
-        $path = sprintf('issue/hive/%s', $this->db_name);
+        $path = sprintf('issue/hive/%s', $this->getDbName());
 
         $result = $this->request($path, array('query' => $query), true);
         $json = json_decode($result);

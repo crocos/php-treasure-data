@@ -33,6 +33,11 @@ abstract class Base
         $this->db_name = $db_name;
     }
 
+    public function getDbName()
+    {
+        return $this->db_name;
+    }
+
     protected function request($path, $params = array(), $is_post = false)
     {
         $url = API::ENDPOINT
