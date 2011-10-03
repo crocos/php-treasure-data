@@ -40,14 +40,7 @@ abstract class Base
 
     protected function request($path, $params = array(), $is_post = false)
     {
-        $url = API::ENDPOINT
-            . '/' . API::APIVERSION
-            . '/' . static::PATH
-            . '/' . ltrim($path, '/');
-        if ($is_post) {
-            $url .= '?' . http_build_query($params);
-        }
-
+        $url = $this->makeURL($path, $params, $is_post);
         API::log("API request to $url");
 
         $ch = curl_init($url);
@@ -69,6 +62,19 @@ abstract class Base
             throw new Exception(sprintf('API result is null: \'%s\'', $url));
         }
         return $ret;
+    }
+
+    protected function makeURL($path, $params, $is_post = false)
+    {
+        $url = API::ENDPOINT
+            . '/' . API::APIVERSION
+            . '/' . static::PATH
+            . '/' . ltrim($path, '/');
+        if (!$is_post) {
+            $url .= '?' . http_build_query($params);
+        }
+
+        return $url;
     }
 
     public static function hasAPI($name)
