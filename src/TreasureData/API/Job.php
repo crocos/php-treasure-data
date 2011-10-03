@@ -50,11 +50,15 @@ class Job extends Base
         return $json;
     }
 
-    public function result($id, $format = 'tsv')
+    public function result($id, $format = 'json')
     {
         $path = sprintf('result/%s', $id);
 
         $result = $this->request($path, array('format' => $format));
+
+        if ($format == 'json') {
+            return json_decode($result);
+        }
         return $result;
     }
 }

@@ -44,7 +44,7 @@ class Autoload
                 substr($classname, strpos($classname, $this->ns_sep) + 1))
             . $this->suffix;
 
-        retrun $this->loadFile($filename);
+        return $this->loadFile($filename);
     }
 
     public function loadFile($filename)
