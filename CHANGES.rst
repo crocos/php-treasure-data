@@ -1,11 +1,13 @@
 Change Logs
 ======================
 
-0.1.2 alpha (dev)
+0.2.0 alpha (dev)
 ----------------
 
-* Autoloader class.
+* New feature: QueryBuilder.
+* Autoloader.
 * Defatult format of Job::result() is now 'json'.
+* Added test for PHPUnit.
 
 0.1.1 alpha
 ----------------

@@ -31,7 +31,7 @@ class API
     /**
      *  @const  string  client library version
      */
-    const VERSION = '0.1.2-dev';
+    const VERSION = '0.2.0-dev';
 
     const CONFFILE = '~/.td/td.conf';
     const ENDPOINT   = 'http://api.treasure-data.com';
