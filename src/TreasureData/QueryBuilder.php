@@ -5,6 +5,8 @@
 
 namespace TreasureData;
 
+use TreasureData\FunctionMap;
+
 class QueryBuilder
 {
     protected $query = null;
@@ -60,29 +62,41 @@ class QueryBuilder
         return $this->query;
     }
 
+    public function getParsedQuery()
+    {
+        if ($this->parsed_query === null) {
+            throw new \RuntimeException("Able to get parsed query after getQuery() called.");
+        }
+        return $this->parsed_query;
+    }
+
     public function getQuery()
     {
         if ($this->query === null) {
             throw new \RuntimeException("prepare() to set query before getQuery().");
         }
 
-        $this->parsed_query = $this->query;
-        $parsed_query = $this->bindFunctionMap();
+        $parsed_query = $this->query;
+        $parsed_query = $this->bindFunctionAlias($parsed_query);
+        $parsed_query = $this->bindValueAlias($parsed_query);
+
+        return $this->parsed_query = $this->getBindQuery($parsed_query);
+    }
+
+    protected function getBindQuery($parsed_query)
+    {
+        $parsed_query = preg_replace('/:([^\s=<>,]+)/e', "'\''.\$this->getValue('\\1').'\''", $parsed_query);
+        return $parsed_query;
+    }
+
+    protected function bindValueAlias($parsed_query)
+    {
         $parsed_query = preg_replace('/v\.([^\s=<>,]+)/', "v['$1']", $parsed_query);
-
-        $this->parsed_query = $parsed_query;
-        return $this->getBindQuery();
+        return $parsed_query;
     }
 
-    protected function getBindQuery()
+    protected function bindFunctionAlias($parsed_query)
     {
-        $this->parsed_query = preg_replace('/:([^\s=<>,]+)/e', "'\''.\$this->getValue('\\1').'\''", $this->parsed_query);
-        return $this->parsed_query;
-    }
-
-    protected function bindFunctionMap()
-    {
-        $parsed_query = $this->parsed_query;
         $parsed_query = preg_replace('/f\.([^\s=<>,]+)/e', "\$this->getFunctionMap('\\1')", $parsed_query);
         return $parsed_query;
     }
