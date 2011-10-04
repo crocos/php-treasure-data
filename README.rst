@@ -11,13 +11,21 @@ Instal from openpear.org ::
     $ sudo pear install openpear/TreasureData
 
 
-Example
+Test
 -------------------------------
 
+Run test by phpunit ::
+
+    $ phpunit
+
+
+Example
+-------------------------------
 
 see:
 
 * `Example for issue, show, result. <example/all.php>`_
+
 
 License
 -------------------------------
