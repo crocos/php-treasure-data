@@ -67,6 +67,19 @@ class QueryBuliderTest extends \PHPUnit_Framework_TestCase
         $q = $qb->prepare("SELECT * FROM user_log WHERE v.user_agent <> 'zabbix' AND v.user_id = :user_id")
             ->bind(array('no_bind_key' => 1))
             ->getQuery();
+    }
+
+    /**
+     */
+    public function testBindIngnoreNonExistKey()
+    {
+        $qb = new QueryBuilder();
+        $q = $qb->prepare("SELECT * FROM user_log WHERE v.user_agent <> 'zabbix' AND v.user_id = :user_id")
+            ->bind(array(
+                'no_bind_key' =>  1, // no placeholder but bind value
+                'user_id' => 1,
+            ), null, $ignore = true)
+            ->getQuery();
 
         $this->assertEquals(
             "SELECT * FROM user_log WHERE v['user_agent'] <> 'zabbix' AND v['user_id'] = '1'",

@@ -27,14 +27,14 @@ class QueryBuilder
         return $this;
     }
 
-    public function bind($key, $value = null)
+    public function bind($key, $value = null, $ignore_nonexist = false)
     {
         if (is_array($key)) {
             foreach ($key as $k => $v) {
-                $this->bindValue($k, $v);
+                $this->bindValue($k, $v, $ignore_nonexist);
             }
         } else {
-            $this->bindValue($key, $value);
+            $this->bindValue($key, $value, $ignore_nonexist);
         }
         return $this;
     }
@@ -79,7 +79,14 @@ class QueryBuilder
         $parsed_query = $this->bindFunctionAlias($parsed_query);
         $parsed_query = $this->bindValueAlias($parsed_query);
 
-        return $this->parsed_query = $this->getBindQuery($parsed_query);
+        try {
+            $this->parsed_query = $this->getBindQuery($parsed_query);
+        } catch (\RuntimeException $e) {
+            throw new \RuntimeException("Value in prepared value not bound any value ({$e->getMessage()}))",
+                $e->getCode(), $e);
+
+        }
+        return $this->parsed_query;
     }
 
     protected function getBindQuery($parsed_query)
@@ -100,12 +107,17 @@ class QueryBuilder
         return $parsed_query;
     }
 
-    protected function bindValue($k, $v)
+    protected function bindValue($k, $v, $ignore_nonexist = false)
     {
         if (!$this->hasParam($k)) {
-            throw new \RuntimeException(":$k is not set in prepared query.");
+           if (!$ignore_nonexist) {
+                throw new \RuntimeException(":$k is not set in prepared query.");
+           } else {
+               return $this;
+           }
         }
 
         $this->bind_values[$k] = $v;
+        return $this;
     }
 }
