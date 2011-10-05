@@ -91,19 +91,19 @@ class QueryBuilder
 
     protected function getBindQuery($parsed_query)
     {
-        $parsed_query = preg_replace('/:([^\s=<>,]+)/e', "'\''.\$this->getValue('\\1').'\''", $parsed_query);
+        $parsed_query = preg_replace('/:([^\s=<>,\(\)\[\]]+)/e', "'\''.\$this->getValue('\\1').'\''", $parsed_query);
         return $parsed_query;
     }
 
     protected function bindValueAlias($parsed_query)
     {
-        $parsed_query = preg_replace('/v\.([^\s=<>,]+)/', "v['$1']", $parsed_query);
+        $parsed_query = preg_replace('/v\.([^\s=<>,\(\)\[\]]+)/', "v['$1']", $parsed_query);
         return $parsed_query;
     }
 
     protected function bindFunctionAlias($parsed_query)
     {
-        $parsed_query = preg_replace('/f\.([^\s=<>,]+)/e', "\$this->function_alias->get('\\1')", $parsed_query);
+        $parsed_query = preg_replace('/f\.([^\s=<>,\(\)\[\]]+)/e', "\$this->function_alias->get('\\1')", $parsed_query);
         return $parsed_query;
     }
 

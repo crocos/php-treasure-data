@@ -56,6 +56,18 @@ class QueryBuliderTest extends \PHPUnit_Framework_TestCase
             "SELECT * FROM user_log WHERE v['user_agent'] <> 'zabbix' AND v['user_id'] = '1'",
             $q
         );
+
+        $qb = new QueryBuilder();
+        $q = $qb->prepare("SELECT * FROM user_log WHERE v.user_agent <> 'zabbix' AND v.user_id = :user_id AND (time >= :time_from AND time <= :time_to)")
+            ->bind('user_id', 1)
+            ->bind('time_from', 11111111)
+            ->bind('time_to', 11111111)
+            ->getQuery();
+
+        $this->assertEquals(
+            "SELECT * FROM user_log WHERE v['user_agent'] <> 'zabbix' AND v['user_id'] = '1' AND (time >= '11111111' AND time <= '11111111')",
+            $q
+        );
     }
 
     /**
