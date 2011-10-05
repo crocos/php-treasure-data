@@ -5,7 +5,7 @@
 
 namespace TreasureData;
 
-use TreasureData\FunctionMap;
+use TreasureData\FunctionAlias;
 
 class QueryBuilder
 {
@@ -13,13 +13,12 @@ class QueryBuilder
     protected $parsed_query = null;
     protected $bind_values = array();
 
-    private $_function_map = array(
-        'date'  => 'to_date(from_unixtime(cast(time as int)))',
-        'month' => 'to_month(from_unixtime(cast(time as int)))',
-    );
-
-    public function __construct()
+    public function __construct(FunctionAlias $fa = null)
     {
+        if ($fa == null) {
+            $fa = new FunctionAlias();
+        }
+        $this->function_alias = $fa;
     }
 
     public function prepare($query)
@@ -97,16 +96,8 @@ class QueryBuilder
 
     protected function bindFunctionAlias($parsed_query)
     {
-        $parsed_query = preg_replace('/f\.([^\s=<>,]+)/e', "\$this->getFunctionMap('\\1')", $parsed_query);
+        $parsed_query = preg_replace('/f\.([^\s=<>,]+)/e', "\$this->function_alias->get('\\1')", $parsed_query);
         return $parsed_query;
-    }
-
-    protected function getFunctionMap($func_id)
-    {
-        if (isset($this->_function_map[$func_id])) {
-            return $this->_function_map[$func_id];
-        }
-        throw new \RuntimeException("Cannot use '$func_id' as any function alias.");
     }
 
     protected function bindValue($k, $v)
